@@ -1,0 +1,45 @@
+======================================================================
+  TAR UMT AI CHATBOT -- CV Hyperparameter Tuning Report
+  Generated: 2026-04-01 10:38:18
+======================================================================
+
+BEST CONFIGURATION
+----------------------------------------
+  batch_size       = 32
+  learning_rate    = 0.001
+  l2_reg           = 0.001
+  label_smoothing  = 0.1
+  architecture     = [256 -> 128 -> 64]
+  dropout_rates    = [0.5 / 0.4 / 0.3]
+
+PERFORMANCE METRICS (5-Fold CV)
+----------------------------------------
+  Mean Accuracy:   93.10% +/- 0.59%
+  Mean F1 Score:   93.03% +/- 0.62%
+  Mean Precision:  93.44% +/- 0.59%
+  Mean Recall:     93.10% +/- 0.59%
+  Fold Accuracies: ['93.42%', '92.62%', '93.82%', '92.22%', '93.41%']
+
+
+RECOMMENDED tarumtbot.py SETTINGS
+----------------------------------------
+  EPOCHS          = 300
+  BATCH_SIZE      = 32
+  LABEL_SMOOTHING = 0.1
+  L2_REG          = 0.001
+  Learning Rate   = 0.001
+  Architecture    = (256, 128, 64)
+  Dropout Rates   = (0.5, 0.4, 0.3)
+
+  Paste into build_model():
+  -------------------------
+    Dense(256, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+    BatchNormalization(),
+    Dropout(0.5),
+    Dense(128, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+    BatchNormalization(),
+    Dropout(0.4),
+    Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+    BatchNormalization(),
+    Dropout(0.3),
+    Dense(num_classes, activation='softmax'),
