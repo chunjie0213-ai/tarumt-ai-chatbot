@@ -1,60 +1,71 @@
 # TAR UMT AI Chatbot
 
-![TAR UMT AI Chatbot](https://img.shields.io/badge/Status-Active-brightgreen) ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg) ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)
+Desktop campus assistant chatbot for Tunku Abdul Rahman University of Management and Technology (TAR UMT). Built in Python using TF-IDF text vectorization, a TensorFlow/Keras Deep Neural Network (DNN) classifier, typo auto-correction, and a Tkinter desktop interface.
 
-A sleek, modern, deep-learning-powered desktop application providing intelligent, instant responses regarding Tunku Abdul Rahman University of Management and Technology (TAR UMT) facilities and services.
+## Overview
 
-## 📖 Overview
+The application answers campus queries about TAR UMT facilities, locations, and student services from a curated `intents.json` knowledge base. During development, I compared the Keras DNN against Support Vector Machine (SVM) and Naive Bayes baselines using 5-fold cross-validation and hyperparameter tuning.
 
-The TAR UMT AI Chatbot leverages Natural Language Processing (NLP) and a Deep Neural Network (DNN) to understand and respond to user queries accurately. Built with Python and TensorFlow/Keras, it features a custom Tkinter Graphical User Interface (GUI) inspired by ChatGPT, designed for an intuitive and interactive user experience.
+## Evaluation results (5-fold CV)
 
-## ✨ Features
+Results from `code/model graph/cv_tuning_report.txt` on the best DNN configuration (`[256 -> 128 -> 64]`, dropout `[0.5 / 0.4 / 0.3]`, batch size `32`, learning rate `0.001`, label smoothing `0.1`):
 
-- **Intelligent NLP Engine:** Utilizes TF-IDF vectorization coupled with a trained Deep Neural Network for high-accuracy intent classification.
-- **Interactive GUI:** A responsive, aesthetically pleasing desktop interface built entirely in Python using Tkinter.
-- **Auto-Correction System:** Features built-in typo handling to intelligently match misspelled queries with the closest matching vocabulary words.
-- **Campus Assistant:** Pre-trained on `intents.json` to promptly answer queries regarding TAR UMT campus facilities, locations, and essential services.
+- **Mean Accuracy:** 93.10% (+/- 0.59%)
+- **Mean F1 Score:** 93.03% (+/- 0.62%)
+- **Mean Precision:** 93.44% (+/- 0.59%)
+- **Mean Recall:** 93.10% (+/- 0.59%)
 
-## 🛠️ Prerequisites
+![Model comparison chart](code/model%20graph/model_comparison_v2.png)
 
-- **Python 3.8** or higher
-- **TensorFlow / Keras** (for running the `.keras` model)
-- **NumPy & Scikit-Learn** (for vectorization and prediction handling)
+## Features
 
-## 🚀 Installation & Setup
+- **Intent classification:** TF-IDF vectorization paired with a trained TensorFlow/Keras neural network (`tarumt_chatbot_model.keras`)
+- **Typo tolerance:** fuzzy word matching via `difflib` to recover misspelled user queries before inference
+- **Desktop interface:** multithreaded Tkinter chat window with message timestamps and non-blocking model inference
+- **Benchmarking scripts:** training, cross-validation tuning, baseline comparisons (SVM and Naive Bayes), and UAT scripts included under `code/`
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/tarumt-ai-chatbot.git
-   cd tarumt-ai-chatbot/code
-   ```
+## Project structure
 
-2. **Install dependencies:**
-   Make sure you have installed the required machine learning packages:
-   ```bash
-   pip install tensorflow numpy scikit-learn
-   ```
+```text
+tarumt-ai-chatbot/
+├── README.md
+├── Chatbot Report.pdf                 Project report
+└── code/
+    ├── tarumtAiBot.py                 Main Tkinter desktop chatbot
+    ├── DNN_model_train.py             Keras DNN training script
+    ├── SVM_and_NB_model_train.py      SVM and Naive Bayes baseline training
+    ├── cv_tuning.py                   5-fold cross-validation tuning
+    ├── tfidf_algorithm.py             TF-IDF preprocessing helpers
+    ├── UAT.py                         User acceptance testing script
+    ├── intents.json                   Campus Q&A intents dataset
+    ├── tarumt_chatbot_model.keras     Saved Keras model
+    ├── tokenizer.pickle               Saved TF-IDF vectorizer
+    ├── label_encoder.pickle           Saved label encoder
+    └── model graph/                   Evaluation plots and CV reports
+```
 
-3. **Train the Model (Optional):**
-   If you wish to update the chatbot's knowledge by modifying `intents.json`, you will need to retrain the model before running the bot:
-   ```bash
-   python DNN_model_train.py
-   ```
+## Setup and usage
 
-4. **Run the Chatbot:**
-   Start the interactive GUI application:
-   ```bash
-   python tarumtAiBot.py
-   ```
+Requires Python 3.8 or newer (with Tkinter installed).
 
-## 🧠 Model Architecture
+```bash
+git clone https://github.com/chunjie0213-ai/tarumt-ai-chatbot.git
+cd tarumt-ai-chatbot/code
+pip install tensorflow numpy scikit-learn
+```
 
-The bot relies on a few key saved assets (generated from the training scripts):
-- `tarumt_chatbot_model.keras` — The compiled deep learning model.
-- `tokenizer.pickle` — The TF-IDF vectorizer mapping text to numerical vectors.
-- `label_encoder.pickle` — The label encoder for matching model output to predefined intent tags.
-- `intents.json` — The core dataset containing conversational patterns and expected responses.
+Run the desktop chatbot using the pre-trained model artifacts:
 
-## 📜 License
+```bash
+python tarumtAiBot.py
+```
 
-This project was built for educational and academic purposes.
+Retrain the model after modifying `intents.json`:
+
+```bash
+python DNN_model_train.py
+```
+
+## Note
+
+Built as an academic NLP and deep learning project at TAR UMT.
